@@ -1,0 +1,8 @@
+configMapGenerator:
+- name: logstash-config
+  files:
+    - logstash.conf
+    - logstash.yml
+
+resources:
+- logstash-application.yml

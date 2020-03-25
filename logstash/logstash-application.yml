@@ -1,33 +1,12 @@
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: logstash-application
-data:
-  logstash.conf: |-
-    input {
-      tcp {
-        port => 5044
-        codec => "json"
-      }
-    }
-    output {
-      elasticsearch {
-        hosts => "elasticsearch-logging.elasticsearch:9200"
-        index => "logstash-%{+YYYY.MM.dd}"
-        sniffing => false
-      }
-    }
-  logstash.yml: |-
-    http.host: "0.0.0.0"
-    path.config: /usr/share/logstash/pipeline
-    xpack.monitoring.enabled: false
----
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: logstash-application
 spec:
+  selector:
+    matchLabels:
+      app: logstash-application
   template:
     metadata:
       labels:
@@ -61,13 +40,13 @@ spec:
       volumes:
       - name: pipeline
         configMap:
-          name: logstash-application
+          name: logstash-config
           items:
           - key: logstash.conf
             path: logstash.conf
       - name: config
         configMap:
-          name: logstash-application
+          name: logstash-config
           items:
           - key: logstash.yml
             path: logstash.yml
