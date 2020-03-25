@@ -13,7 +13,7 @@ spec:
         app: logstash-application
     spec:
       containers:
-      - image: docker.elastic.co/logstash/logstash:5.5.0
+      - image: docker.elastic.co/logstash/logstash:7.6.1
         name: logstash-application
         ports:
         - name: logstash
